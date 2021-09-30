@@ -1,0 +1,117 @@
+#showModal{
+    width: 100px;
+    height: 100px;
+    cursor:  pointer;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #376DF1;
+    color: #376DF1;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    transition: all 0.2s;
+    box-shadow: 1px 1px 20px rgba(0,0,0,0.4);
+    z-index: 2;
+}
+
+.book-icon{
+    font-size: 2.0rem;
+}
+
+.plus-icon{
+    font-size: 1.0rem;
+}
+
+#showModal:hover{
+    background: #376DF1;
+    color: white;
+}
+
+
+.removeButton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 5px;
+    height: 5px;
+    cursor: pointer;
+    border: none;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 1.5rem;
+    color: rgb(190 190 190);
+    background: transparent;
+}
+
+.removeButton:hover{
+    color: red;
+}
+
+.readButton{
+    left: 15px;
+    cursor: pointer;
+    top: 20px;
+    position: absolute;
+    font-size: 1.5rem;
+    color: rgb(190 190 190);
+}
+
+.wasReadFalse{
+    color: rgb(190 190 190);
+}
+
+.wasReadTrue{
+    color: green;
+}
+
+
+.readButton:hover{
+    color: green;
+}
+
+.editButton{
+    display: flex;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    margin-left: 5px;
+    color: rgb(190 190 190);
+}
+
+.editButton:hover{
+    color: #376DF1;
+}
+
+.infoButton{
+    display: flex;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+    color: rgb(190 190 190);
+}
+
+.infoButton:hover{
+    color: #376DF1;
+}
+
+.dynamicButtonsWrapper{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 50px;
+    height: 200px;
+    position: absolute;
+    right: -5px;
+    top: 15px;
+}
+
+.hideBookButton{
+    display: none;
+}
+
+

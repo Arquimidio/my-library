@@ -1,0 +1,100 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+
+.modal-container{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0;
+	top: 0;
+	background: rgba(0, 0, 0, 0.700);
+	z-index: 3;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	transition: all 0.7s;
+}
+
+.modal{
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	background: white;
+	width: 400px;
+	padding: 30px;
+	border-radius: 10px;
+	font-family: sans-serif;
+	transform: scale(0);
+	transition: all .7s;
+
+}
+
+.modal-scale{
+	transform: scale(1.0);
+}
+
+
+.info-area{
+	display: flex;
+	flex-direction: column;
+	margin: 10px 0px;
+}
+
+.modal input, select{
+	padding: 10px 0px;
+	font-size: 1.5rem;
+	margin-top: 10px;
+	border: none;
+	border-bottom: 1px solid #376DF1;
+}
+
+select{
+	border: 1px solid #376DF1;
+	border-radius: 5px;
+	background: transparent;
+}
+
+.modal input:focus{
+	border: none;
+	border-bottom: 1px solid #376DF1;
+	outline: none;
+}
+
+select:focus{
+	outline: none;
+}
+
+
+::placeholder{
+	font-size: 1.5rem;
+}
+
+
+
+#addBook{
+	font-size: 1.5rem;
+	padding: 5px;
+	margin-top: 30px;
+	border-radius: 5px;
+	cursor: pointer;
+	border: 1px solid black;
+	color: white;
+	background: #376DF1;
+}
+
+#addBook:hover{
+	background: white;
+	color: #376DF1;
+}
+
+#wasRead{
+	display: flex;
+	flex-direction: row;
+}
+
+#wasRead div{
+	margin:  0px 10px;
+}
+

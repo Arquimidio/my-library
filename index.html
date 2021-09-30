@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>My Library</title>
+		<meta charset="UTF-8">
+		<link rel="icon" href="./Resources/favicon.ico">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" type="text/css" href="./Style/buttons.css">
+		<link rel="stylesheet" href="./Style/modal.css">
+		<link rel="stylesheet" type="text/css" href="./Style/style.css">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+	</head>
+	<body>
+
+		<!-- INÍCIO MODAIS -->
+		<div class="modal-container" id="modalContainer">
+			<div class="modal">
+				<div class="info-area">
+					<input class="bookInfo" type="text" name="book" id="book" placeholder="Book name">
+				</div>
+				<div class="info-area">
+					<input class="bookInfo" type="text" name="author" id="author" placeholder="Author">
+				</div>
+				<div class="info-area">
+					<input class="bookInfo" type="text" name="pages" id="pages" placeholder="Pages">
+				</div>
+				<div class="info-area">
+					<select id="category">
+						<option value="Category">Category</option>
+						<option value="Adventure">Adventure</option>
+						<option value="Fantasy">Fantasy</option>
+						<option value="Thriller">Thriller</option>
+						<option value="Horror">Horror</option>
+						<option value="Philosophy">Philosophy</option>
+						<option value="Romance">Romance</option>
+						<option value="Science Fiction">Science Fiction</option>
+					</select>
+				</div>
+				<label>Book was read?</label>
+				<div class="info-area" id="wasRead">
+					<div>
+						<input type="radio" value="yes" name="wasRead" id="yesWasRead">
+						<label for="yesWasRead">Yes</label>
+					</div>
+					<div>
+						<input type="radio" value="no" name="wasRead" id="noWasRead" checked>
+						<label for="noWasRead">No</label>
+					</div>
+				</div>
+				<div class="info-area">
+					<input class="bookInfo" type="text" name="pages" id="pages" placeholder="Actual page">
+				</div>
+				<div class="info-area">
+					<input class="bookInfo" class="bookRead" type="text" name="bookRead" id="bookRead" placeholder="Image URL">
+				</div>
+				<button type="button" id="addBook">Add book</button>
+			</div>
+		</div>
+		<!-- FIM MODAIS -->
+
+		<div class="container">
+			<div>
+				<nav>
+					<div class="logo">My Library</div>
+					<ul>
+						<li class="navSelector">Home</li>
+						<li class="navSelector">Adventure</li>
+						<li class="navSelector">Fantasy</li>
+						<li class="navSelector">Thriller</li>
+						<li class="navSelector">Horror</li>
+						<li class="navSelector">Philosophy</li>
+						<li class="navSelector">Romance</li>
+						<li class="navSelector">Science Fiction</li>
+					</ul>
+				</nav>
+				<!-- Área de  INSERÇÃO DOS LIVROS -->
+				<main id="bookContainer">
+				</main>
+			</div>
+			<button type="button" id="showModal"><i class="fas fa-book book-icon"></i><i class="fas fa-plus-circle plus-icon"></i></button>
+			<div id="bottomArea">
+				<ul id="pagination">
+
+				</ul>
+				<footer>
+					<p>Designed by Gabriel Stoppa (@Arquimidio)</p>
+					<span id="github"><i class="fab fa-github"></i></span>
+				</footer>
+			<div>
+		</div>
+
+		
+		<script src="./Script/modal.js"></script>
+		<script src="./Script/library.js"></script>
+	</body>
+</html>
