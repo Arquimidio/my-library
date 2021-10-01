@@ -11,7 +11,7 @@
 8. Visualização das informações do livro
 
 ## II. Aprendizados
-### O projeto foi incrível para aprender, quase que literalmente, um caminhão de coisas, conhecimentos valiosos que com certeza serão de grande utilidade para projetos futuros. Listo alguns desses conhecimentos adquiridos e aprimorados:
+### O projeto foi incrível para aprender, quase que literalmente, um caminhão de coisas, conhecimentos valiosos que com certeza serão de grande utilidade para projetos futuros. Listo alguns conhecimentos adquiridos e aprimorados:
 1. Uso do localstorage, parse e stringify
 2. Module pattern, closure e IIFEs
 3. Fixação dos aprendizados quanto a map e filter
