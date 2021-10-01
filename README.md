@@ -1,6 +1,6 @@
 # my-library
 
-## I.Funcionalidades implementadas até o momento
+## :gear: Funcionalidades implementadas até o momento
 1. Criação de livros com imagens e animações
 2. Armazenamento local dos livros
 3. Filtro de livros por categoria
@@ -10,12 +10,12 @@
 7. Edição das informações de livros já criados
 8. Visualização das informações do livro
 
-## II. Tecnologias utilizadas
+## :computer: Tecnologias utilizadas
 1. HTML
 2. CSS
 3. Vanilla Javascript
 
-## III. Aprendizados
+## :nerd_face: Aprendizados
 ### O projeto foi incrível para aprender, quase que literalmente, um caminhão de coisas, conhecimentos valiosos que com certeza serão de grande utilidade para projetos futuros. Listo alguns conhecimentos adquiridos e aprimorados:
 1. Uso do localstorage, parse e stringify
 2. Module pattern, closure e IIFEs
