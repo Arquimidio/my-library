@@ -1,4 +1,4 @@
-# my-library
+# :blue_book:my-library
 
 ## :gear: Funcionalidades implementadas até o momento
 1. Criação de livros com imagens e animações
