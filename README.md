@@ -41,7 +41,7 @@ A ideia foi criar uma **single page aplication** com funcionalidades de um regis
 O projeto possui potencial para receber diversas adições que aumentarão sua funcionalidade e otimizarão sua execução. Algumas delas serão:
 1. Barra de progresso de leitura
 2. Barra de pesquisa de livros por nome e autor
-3. Filtragem por livros lidros
+3. Filtragem por livros lidos
 4. Filtragem por data de leitura
 5. Criação de metas de leitura
 6. Lista de livros a serem lidos
