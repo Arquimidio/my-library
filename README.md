@@ -46,10 +46,11 @@ O projeto possui potencial para receber diversas adições que aumentarão sua f
 5. Criação de metas de leitura
 6. Lista de livros a serem lidos
 7. Desafios de leitura
-8. Melhorias de design
-9. Gráficos de progresso
-10. Timer de leitura
-11. Otimização de carregamento dos cards dos livros
-12. Recriar a aplicação com REACT
+8. Modo LITE
+9. Melhorias de design
+10. Gráficos de progresso
+11. Timer de leitura
+12. Otimização de carregamento dos cards dos livros
+13. Recriar a aplicação com REACT
 
 
