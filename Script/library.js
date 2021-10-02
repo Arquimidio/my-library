@@ -7,7 +7,9 @@ const modals = {
 	edit: {
 		container: document.getElementById('editBookModalContainer'), 
 		modal: document.getElementById('modal-edit-form'),
-		selector: document.getElementById('categoryEdited')
+		selector: document.getElementById('categoryEdited'),
+		yesWasRead: document.getElementById('yesWasReadEdited'),
+		noWasRead: document.getElementById('noWasReadEdited')
 	},
 }
 
@@ -214,6 +216,9 @@ function fillModal(index){
 		elt.value = storageItem[elt.id.replace('Edited', '')]
 	})
 	modals.edit.selector.value = storageItem.category
+	storageItem.wasRead? 
+	modals.edit.yesWasRead.checked = true
+	:modals.edit.noWasRead.checked = true
 }
 
 function editBookInfo(num){
