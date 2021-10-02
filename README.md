@@ -1,7 +1,7 @@
 # :blue_book:My Library
 
 ## :bookmark_tabs: Objetivo do projeto
-A ideia foi criar uma **single page aplication** com funcionalidades de um registro de leitura, marcando livros que já foram ou não lidos, adicionando ou excluindo livros, filtrando-os por categoria, editando o progresso de leitura, dentre outras. A proposta veio do curso "The Odin Project". A princípio, o objetivo era criar uma aplicação apenas com a as funcionalidades básicas, como instruia o curso, mas vi potencial para treinar várias e fixar várias habilidades de HTML, CSS e JS ao implementar mecanismos um pouco mais complexos.
+A ideia foi criar uma **single page aplication** com funcionalidades de um registro de leitura, marcando livros que já foram ou não lidos, adicionando ou excluindo livros, filtrando-os por categoria, editando o progresso de leitura, dentre outras. A proposta veio do curso "The Odin Project". A princípio, o objetivo era criar uma aplicação apenas com a as funcionalidades básicas, como instruia o curso, mas vi potencial para treinar e fixar várias habilidades de HTML, CSS e JS ao implementar mecanismos um pouco mais complexos.
 
 ## :gear: Funcionalidades implementadas até o momento
 1. Criação de livros com imagens e animações
