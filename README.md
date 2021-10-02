@@ -50,5 +50,6 @@ O projeto possui potencial para receber diversas adições que aumentarão sua f
 9. Gráficos de progresso
 10. Timer de leitura
 11. Otimização de carregamento dos cards dos livros
+12. Recriar a aplicação com REACT
 
 
