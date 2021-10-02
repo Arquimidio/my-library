@@ -1,22 +1,81 @@
+////////////////////////////////////// MODAIS ///////////////////////////////////////////////////////////////////////
+const modals = {
+	add: {container: document.getElementById('addBookModalContainer'), modal: document.getElementById('modal-book-form')},
+	edit: {container: document.getElementById('editBookModalContainer'), modal: document.getElementById('modal-edit-form')}
+}
+
+const bookForEdition = (function(){
+	let bookId;
+	let setId = (elt) => bookId = elt.dataset.in
+	let getId = () => bookId
+	return{setId, getId}
+})()
+
+function changeEditingId(child){
+	let element = child.closest('.bookInfoWrapper')
+	bookForEdition.setId(element)
+}
+
+
+let showModal = document.getElementById('showModal')
+
+showModal.addEventListener('click', (e) => makeModalVisible(e, modals.add.container, modals.add.modal))
+window.addEventListener('click', hideModal)
+
+function makeModalVisible(e, container, modal, editing=false){
+	container.style.display = 'flex'
+	if(editing){
+		changeEditingId(e.target)
+		fillModal(bookForEdition.getId())
+	}
+	setTimeout(() => {
+		container.style.opacity = '1'
+		modal.classList.add('modal-scale')
+	}, 0.2)
+}
+
+function hideModal(e){
+	if([...e.target.classList].includes('modal-container')){
+		e.target.firstElementChild.classList.remove('modal-scale')
+		e.target.style.opacity = '0'
+		setTimeout(() => e.target.style.display = 'none', 650)
+	}
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
 const DOM = (function(){
 	const bookButton = document.getElementById('addBook')
+	const editButton = document.getElementById('editBook')
 	const bookContainer = document.getElementById('bookContainer')
 	const navSelectors = [...document.getElementsByClassName('navSelector')]
-	const bookInfoList = [...document.getElementsByClassName('bookInfo')]
+	const bookAddedList = [...document.getElementsByClassName('bookAdded')]
+	const bookEditedList = [...document.getElementsByClassName('bookEdited')]
 	const bookCards = document.getElementsByClassName('bookInfoWrapper')
-	const getBookInfoList = () => bookInfoList
+	const getBookAddedList = () => bookAddedList
+	const getBookEditedList = () => bookEditedList
+	const getEditButton = () => editButton
 	const getBookButton = () => bookButton
 	const getBookContainer = () => bookContainer
 	const getNavSelectors = () => navSelectors
 	const getBookCards = () => bookCards
-	return{getBookInfoList, getBookButton, getBookContainer, getNavSelectors, getBookCards}
+	return{getBookAddedList, getBookEditedList, getEditButton, getBookButton, getBookContainer, getNavSelectors, getBookCards}
 })()
 
 const modularNum = (function(){
-	const desiredNum = 16
+	const desiredNum = 8
 	const getDesiredNum = () => desiredNum
 	return {getDesiredNum}
 })()
+
 
 const observerState = (function(){
 	let active = false
@@ -35,7 +94,6 @@ const observerState = (function(){
 
 
 
-
 ///////////////////////////////////////////////
 
 //Flag variables that may be changed
@@ -47,6 +105,7 @@ window.addEventListener('resize', verifySize)
 window.addEventListener('load', loadBooks)
 window.addEventListener('click', verifyClick)
 DOM.getBookButton().addEventListener('click', addBookToLibrary)
+DOM.getEditButton().addEventListener('click', () => editBookInfo(bookForEdition.getId()))
 DOM.getNavSelectors().map(elt => {
 	elt.addEventListener('click', (e) => filterBooks(e))
 	elt.addEventListener('click', changeNavLiColor)
@@ -105,7 +164,7 @@ const Book = function(name, author, pageNumber, category, wasRead, actualPage, i
 	this.pageNumber = pageNumber
 	this.category = category
 	this.wasRead = wasRead
-	this.actualpage = actualPage
+	this.actualPage = actualPage
 	this.imgUrl = imgUrl
 }
 
@@ -134,11 +193,31 @@ function removeBook(e){
 function createEditButton(){
 	let button = document.createElement('div')
 	button.className = 'bookButton editButton'
+	button.addEventListener('click', (e) => makeModalVisible(e, modals.edit.container, modals.edit.modal, true))
 	let icon = document.createElement('i')
 	icon.className = 'far fa-edit'
 	button.appendChild(icon)
-	button.addEventListener('click', removeBook)
 	return button
+}
+
+function fillModal(index){
+	let inputs = DOM.getBookEditedList()
+	const storage = JSON.parse(localStorage.getItem(`${index}`))
+	console.log(storage)
+	inputs.forEach(elt => {
+		elt.value = storage[elt.id.replace('Edited', '')]
+	})
+}
+
+function editBookInfo(num){
+	let inputs = DOM.getBookEditedList()
+	let obj = JSON.parse(localStorage.getItem(`${num}`))
+	inputs.forEach(elt => obj[elt.id.replace('Edited', '')] = elt.value)
+	localStorage.setItem(`${num}`, JSON.stringify(obj))
+
+	let bookVisual = document.querySelector(`[data-in="${num}"]`)
+	let bookVisualInfo = [...bookVisual.querySelectorAll('.bookVisualInfo')]
+	bookVisualInfo.forEach((info, i) => info.textContent = inputs[i].value)
 }
 
 function createReadButton(wasRead){
@@ -167,10 +246,12 @@ function markBookAsRead(){
 	let bookOnStorage = JSON.parse(localStorage.getItem(index))
 	let bookWasRead = bookOnStorage.wasRead
 	if(bookWasRead){
+		bookOnStorage.actualPage = '0'
 		bookOnStorage.wasRead = false;
 		this.classList.remove('wasReadTrue')
 		this.classList.add('wasReadFalse')
 	} else{
+		bookOnStorage.actualPage = bookOnStorage.pageNumber
 		bookOnStorage.wasRead = true
 		this.classList.add('wasReadTrue')
 		this.classList.remove('wasReadFalse')
@@ -209,21 +290,23 @@ function createPagination(list){
 
 function removePagination(){
 	let ul = document.getElementById('pagination')
-	ul.innerHTML = ''
+	while(ul.firstChild){
+    	ul.removeChild(ul.firstChild);
+	}
 }
 
 ////////////////////////////// FORM (MODAL) AREA //////////////////////////////////
 
 //Manipulate modal info
 const getInfoFromForm = function(){
-	let bookInfoList = DOM.getBookInfoList()
-	let valueList = bookInfoList.map(elt => elt.value)
-	return [valueList, bookInfoList]
+	let bookList = DOM.getBookAddedList()
+	let valueList = bookList.map(elt => elt.value)
+	return [valueList, bookList]
 }
 
 function clearInfoFromForm(){
-	const bookInfoList = getInfoFromForm()[1]
-	bookInfoList.map(elt => elt.value = '')
+	const bookAddedList = getInfoFromForm()[1]
+	bookAddedList.map(elt => elt.value = '')
 	let select = getDropdown()
 	select.value = 'Category'
 }
@@ -251,9 +334,9 @@ function createBookVisual(elt, index, isHidden=false){
 	let bookInfoWrapper = document.createElement('div')
 	bookInfoWrapper.dataset.in = index
 	let bookParagraph = document.createElement('p')
-	bookParagraph.innerHTML = `<span>${reduceBigStrings(elt.name)}</span><br>
-							   ${reduceBigStrings(elt.author)}<br>
-							   Pages: ${reduceBigStrings(elt.pageNumber)}`
+	bookParagraph.innerHTML = `<span class='bookVisualInfo titleSpan'>${reduceBigStrings(elt.name)}</span><br>
+							   <span class='bookVisualInfo'>${reduceBigStrings(elt.author)}</span><br>
+							   <span class='bookVisualInfo'>Pages: ${reduceBigStrings(elt.pageNumber)}</span>`
 
 	bookInfoWrapper.className = 'bookInfoWrapper' + (isHidden? ' hideWrapper': '')
 	const bookVisual = document.createElement('div')
@@ -283,6 +366,7 @@ function createBaseIndex(){
 	}
 	return localStorage.index
 }
+
 
 //Adds book to the library (the JSON and the visual representantion (card))
 function addBookToLibrary(){

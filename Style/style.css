@@ -169,7 +169,7 @@ nav li:hover{
     font-size: 0.9rem;
 }
 
-#bookContainer p span{
+.titleSpan{
     font-size: 1.1rem;
     font-weight: 550;
 }

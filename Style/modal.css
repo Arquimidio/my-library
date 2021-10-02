@@ -21,7 +21,7 @@
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
-	background: white;
+	background: #E6F4F1;
 	width: 400px;
 	padding: 30px;
 	border-radius: 10px;
@@ -42,12 +42,13 @@
 	margin: 10px 0px;
 }
 
-.modal input, select{
+.bookInfo, select{
 	padding: 10px 0px;
 	font-size: 1.5rem;
 	margin-top: 10px;
 	border: none;
 	border-bottom: 1px solid #376DF1;
+	background: #E6F4F1;
 }
 
 select{
@@ -56,7 +57,7 @@ select{
 	background: transparent;
 }
 
-.modal input:focus{
+.bookInfo:focus{
 	border: none;
 	border-bottom: 1px solid #376DF1;
 	outline: none;
@@ -73,7 +74,7 @@ select:focus{
 
 
 
-#addBook{
+#addBook, #editBook{
 	font-size: 1.5rem;
 	padding: 5px;
 	margin-top: 30px;
@@ -84,7 +85,7 @@ select:focus{
 	background: #376DF1;
 }
 
-#addBook:hover{
+#addBook:hover, #editBook:hover{
 	background: white;
 	color: #376DF1;
 }
@@ -96,5 +97,10 @@ select:focus{
 
 #wasRead div{
 	margin:  0px 10px;
+}
+
+
+.editBook{
+     
 }
 
