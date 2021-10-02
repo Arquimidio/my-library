@@ -1,7 +1,14 @@
 ////////////////////////////////////// MODAIS ///////////////////////////////////////////////////////////////////////
 const modals = {
-	add: {container: document.getElementById('addBookModalContainer'), modal: document.getElementById('modal-book-form')},
-	edit: {container: document.getElementById('editBookModalContainer'), modal: document.getElementById('modal-edit-form')}
+	add: {
+		container: document.getElementById('addBookModalContainer'), 
+		modal: document.getElementById('modal-book-form')
+	},
+	edit: {
+		container: document.getElementById('editBookModalContainer'), 
+		modal: document.getElementById('modal-edit-form'),
+		selector: document.getElementById('categoryEdited')
+	},
 }
 
 const bookForEdition = (function(){
@@ -202,11 +209,11 @@ function createEditButton(){
 
 function fillModal(index){
 	let inputs = DOM.getBookEditedList()
-	const storage = JSON.parse(localStorage.getItem(`${index}`))
-	console.log(storage)
+	const storageItem = JSON.parse(localStorage.getItem(`${index}`))
 	inputs.forEach(elt => {
-		elt.value = storage[elt.id.replace('Edited', '')]
+		elt.value = storageItem[elt.id.replace('Edited', '')]
 	})
+	modals.edit.selector.value = storageItem.category
 }
 
 function editBookInfo(num){
