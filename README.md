@@ -35,7 +35,7 @@ A ideia foi criar uma **single page aplication** com funcionalidades de um regis
 13. Alteração de comportamento da página, por meio do JavaScript, com base no tamanho da tela do usuário 
 14. REGEX
 15. Formas de otimizar o código para lidar com grandes quantidades de dados armazenados
-16. Maneiras de tornar o código mais legível (nesse caso, colocando cada funcionalidade dentro de sua própria função, evitando programação procedural)
+16. Maneiras de tornar o código mais legível (nesse caso, colocando cada funcionalidade dentro de sua própria função)
 
 ## :date: Futuras implementações
 O projeto possui potencial para receber diversas adições que aumentarão sua funcionalidade e otimizarão sua execução. Algumas delas serão:
