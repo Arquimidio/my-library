@@ -457,6 +457,7 @@ function addBookToLibrary(){
 			createBookVisual(book, index, true)
 		}
 		form.clearInfoFromForm()
+		location.reload()
 	}else{
 		alert("Please, fill all the info!")
 	}
