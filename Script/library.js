@@ -1,3 +1,4 @@
+'use strict'
 ////////////////////////////////////// MODAIS ///////////////////////////////////////////////////////////////////////
 const modals = {
 	add: {
@@ -13,53 +14,7 @@ const modals = {
 	},
 }
 
-const bookForEdition = (function(){
-	let bookId;
-	let setId = (elt) => bookId = elt.dataset.in
-	let getId = () => bookId
-	return{setId, getId}
-})()
-
-function changeEditingId(child){
-	let element = child.closest('.bookInfoWrapper')
-	bookForEdition.setId(element)
-}
-
-
-let showModal = document.getElementById('showModal')
-
-showModal.addEventListener('click', (e) => makeModalVisible(e, modals.add.container, modals.add.modal))
-window.addEventListener('click', hideModal)
-
-function makeModalVisible(e, container, modal, editing=false){
-	container.style.display = 'flex'
-	if(editing){
-		changeEditingId(e.target)
-		fillModal(bookForEdition.getId())
-	}
-	setTimeout(() => {
-		container.style.opacity = '1'
-		modal.classList.add('modal-scale')
-	}, 0.2)
-}
-
-function hideModal(e){
-	if([...e.target.classList].includes('modal-container')){
-		e.target.firstElementChild.classList.remove('modal-scale')
-		e.target.style.opacity = '0'
-		setTimeout(() => e.target.style.display = 'none', 650)
-	}
-}
-
-
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
 
 const DOM = (function(){
 	const bookButton = document.getElementById('addBook')
@@ -76,11 +31,19 @@ const DOM = (function(){
 	const getBookContainer = () => bookContainer
 	const getNavSelectors = () => navSelectors
 	const getBookCards = () => bookCards
-	return{getBookAddedList, getBookEditedList, getEditButton, getBookButton, getBookContainer, getNavSelectors, getBookCards}
+	return{
+		getBookAddedList, 
+		getBookEditedList, 
+		getEditButton, 
+		getBookButton, 
+		getBookContainer, 
+		getNavSelectors, 
+		getBookCards
+	}
 })()
 
 const modularNum = (function(){
-	const desiredNum = 8
+	const desiredNum = 16;
 	const getDesiredNum = () => desiredNum
 	return {getDesiredNum}
 })()
@@ -109,22 +72,12 @@ const observerState = (function(){
 let selectedLi = 'Home'
 let list;
 
-//Event listeners definition
-window.addEventListener('resize', verifySize)
-window.addEventListener('load', loadBooks)
-window.addEventListener('click', verifyClick)
-DOM.getBookButton().addEventListener('click', addBookToLibrary)
-DOM.getEditButton().addEventListener('click', () => editBookInfo(bookForEdition.getId()))
-DOM.getNavSelectors().map(elt => {
-	elt.addEventListener('click', (e) => filterBooks(e))
-	elt.addEventListener('click', changeNavLiColor)
-})
 
 function createIntersectionObserver(entryList){
 	let options = {threshold: [1.0]}
 	let callback = (entries, observer) => {
 		entries.forEach(entry => {
-			let childNode = [...entry.target.childNodes].filter(elt => [...elt.classList].includes('dynamicButtonsWrapper'))[0]
+			let childNode = entry.target.querySelector('.dynamicButtonsWrapper')
 			if(entry.isIntersecting && entry.intersectionRatio >= 1){
 				childNode.classList.remove('hideBookButton')
 			}else{
@@ -159,13 +112,6 @@ function changeNavLiColor(){
 	}
 }
 
-function verifyClick(e){
-	if(e.target.className === 'paginationLi'){
-		let cards = list
-		showFraction(cards, e.target.dataset.pag - 1)
-	}
-}
-
 // Constructor function to create Book objects
 const Book = function(name, author, pageNumber, category, wasRead, actualPage, imgUrl){
 	this.name = name
@@ -178,195 +124,310 @@ const Book = function(name, author, pageNumber, category, wasRead, actualPage, i
 }
 
 ///////////////////// BUTTON CREATION AREA///////////////////////////////////////////
+const bookForEdition = (function(){
+	let bookId;
+	const setId = (elt) => bookId = elt.dataset.in
+	const getId = () => bookId
 
-function createDynamicButtonsWrapper(){
-	const wrapper = document.createElement('div')
-	wrapper.className = 'dynamicButtonsWrapper hideBookButton'
-	return wrapper
-}
-
-function createRemoveButton(){
-	let button = document.createElement('button')
-	button.type = 'button'
-	button.className = 'bookButton removeButton'
-	button.textContent = 'X'
-	button.addEventListener('click', removeBook)
-	return button
-}
-
-function removeBook(e){
-	DOM.getBookContainer().removeChild(this.closest('.bookInfoWrapper'))
-	localStorage.removeItem(this.closest('.bookInfoWrapper').dataset.in)
-}
-
-function createEditButton(){
-	let button = document.createElement('div')
-	button.className = 'bookButton editButton'
-	button.addEventListener('click', (e) => makeModalVisible(e, modals.edit.container, modals.edit.modal, true))
-	let icon = document.createElement('i')
-	icon.className = 'far fa-edit'
-	button.appendChild(icon)
-	return button
-}
-
-function fillModal(index){
-	let inputs = DOM.getBookEditedList()
-	const storageItem = JSON.parse(localStorage.getItem(`${index}`))
-	inputs.forEach(elt => {
-		elt.value = storageItem[elt.id.replace('Edited', '')]
-	})
-	modals.edit.selector.value = storageItem.category
-	storageItem.wasRead? 
-	modals.edit.yesWasRead.checked = true
-	:modals.edit.noWasRead.checked = true
-}
-
-function editBookInfo(num){
-	let inputs = DOM.getBookEditedList()
-	let obj = JSON.parse(localStorage.getItem(`${num}`))
-	inputs.forEach(elt => obj[elt.id.replace('Edited', '')] = elt.value)
-	localStorage.setItem(`${num}`, JSON.stringify(obj))
-
-	let bookVisual = document.querySelector(`[data-in="${num}"]`)
-	let bookVisualInfo = [...bookVisual.querySelectorAll('.bookVisualInfo')]
-	bookVisualInfo.forEach((info, i) => info.textContent = inputs[i].value)
-}
-
-function createReadButton(wasRead){
-	let button = document.createElement('span')
-	let icon = document.createElement('i')
-	button.className = 'readButton' + (wasRead? ' wasReadTrue': ' wasReadFalse')
-	icon.className = 'fas fa-check-circle'
-	button.appendChild(icon)
-	button.addEventListener('click', markBookAsRead)
-	return button
-}
-
-function createInfoButton(){
-	let button = document.createElement('div')
-	button.className = 'bookButton infoButton'
-	let icon = document.createElement('i')
-	icon.className = 'fas fa-info-circle'
-	button.appendChild(icon)
-	button.addEventListener('click', removeBook)
-	return button
-}
-
-
-function markBookAsRead(){
-	let index = this.parentElement.dataset.in
-	let bookOnStorage = JSON.parse(localStorage.getItem(index))
-	let bookWasRead = bookOnStorage.wasRead
-	if(bookWasRead){
-		bookOnStorage.actualPage = '0'
-		bookOnStorage.wasRead = false;
-		this.classList.remove('wasReadTrue')
-		this.classList.add('wasReadFalse')
-	} else{
-		bookOnStorage.actualPage = bookOnStorage.pageNumber
-		bookOnStorage.wasRead = true
-		this.classList.add('wasReadTrue')
-		this.classList.remove('wasReadFalse')
+	function changeEditingId(child){
+		let element = child.closest('.bookInfoWrapper')
+		bookForEdition.setId(element)
 	}
-	localStorage.setItem(index, JSON.stringify(bookOnStorage))
-}
 
-function showBookButtons(e){
-	let childList = [...e.target.childNodes]
-	childList.forEach(elt =>{
-		if(/dynamicButtonsWrapper/.test(elt.className)){
-			elt.classList.remove('hideBookButton')
+	return {
+		setId, 
+		getId,
+		changeEditingId
+	}
+})()
+
+
+//MODULE TO CREATE THE BUTTONS IN THE DOM
+const makeBtn = (function(){
+
+	function createDynamicButtonsWrapper(){
+		const wrapper = document.createElement('div')
+		wrapper.className = 'dynamicButtonsWrapper hideBookButton'
+		return wrapper
+	}
+
+	function createRemoveButton(){
+		const button = document.createElement('button')
+		button.type = 'button'
+		button.className = 'bookButton removeButton'
+		button.textContent = 'X'
+		button.addEventListener('click', btnFunctionality.removeBook)
+		return button
+	}
+
+	function createEditButton(){
+		const button = document.createElement('div')
+		const icon = document.createElement('i')
+		button.className = 'bookButton editButton'
+		button.addEventListener('click', (e) => form.makeModalVisible(e, 
+																 modals.edit.container,
+																 modals.edit.modal, 
+																 true))
+		icon.className = 'far fa-edit'
+		button.appendChild(icon)
+		return button
+	}
+
+	function createReadButton(wasRead){
+		const button = document.createElement('span')
+		const icon = document.createElement('i')
+		button.className = 'readButton' + (wasRead? ' wasReadTrue': ' wasReadFalse')
+		icon.className = 'fas fa-check-circle'
+		button.appendChild(icon)
+		button.addEventListener('click', btnFunctionality.markBookAsRead)
+		return button
+	}
+
+	function createInfoButton(){
+		const button = document.createElement('div')
+		const icon = document.createElement('i')
+		button.className = 'bookButton infoButton'
+		icon.className = 'fas fa-info-circle'
+		button.appendChild(icon)
+		return button
+	}
+
+	return{
+		createDynamicButtonsWrapper,
+		createRemoveButton,
+		createEditButton,
+		createReadButton,
+		createInfoButton
+	}
+})()
+
+//GIVES FUNCTIONALITY TO THE BUTTONS
+const btnFunctionality = (function(){
+
+	function removeBook(e){
+		DOM.getBookContainer().removeChild(this.closest('.bookInfoWrapper'))
+		localStorage.removeItem(this.closest('.bookInfoWrapper').dataset.in)
+	}
+
+	function editBookInfo(num){
+		const inputs = DOM.getBookEditedList()
+		const editingCategory = document.getElementById('categoryEdited')
+		const obj = JSON.parse(localStorage.getItem(`${num}`))
+		const bookVisual = document.querySelector(`[data-in="${num}"]`)
+		const bookVisualInfo = [...bookVisual.querySelectorAll('.bookVisualInfo')]
+		inputs.forEach(elt => obj[elt.id.replace('Edited', '')] = elt.value)
+		obj['category'] = editingCategory.value
+		localStorage.setItem(`${num}`, JSON.stringify(obj))
+		bookVisualInfo.forEach((info, i) => info.textContent = inputs[i].value)
+	}
+
+	function markBookAsRead(){
+		let index = this.parentElement.dataset.in
+		let bookOnStorage = JSON.parse(localStorage.getItem(index))
+		let bookWasRead = bookOnStorage.wasRead
+		if(bookWasRead){
+			bookOnStorage.actualPage = '0'
+			bookOnStorage.wasRead = false;
+			this.classList.remove('wasReadTrue')
+			this.classList.add('wasReadFalse')
+		} else{
+			bookOnStorage.actualPage = bookOnStorage.pageNumber
+			bookOnStorage.wasRead = true
+			this.classList.add('wasReadTrue')
+			this.classList.remove('wasReadFalse')
 		}
-	})
-}
+		localStorage.setItem(index, JSON.stringify(bookOnStorage))
+	}
 
-function hideBookButtons(e){
-	let childList = [...e.target.childNodes]
-	childList.forEach(elt =>{
-		if(/dynamicButtonsWrapper/.test(elt.className)){
-			elt.classList.add('hideBookButton')
+	function showBookButtons(e){
+		let child = e.target.querySelector('.dynamicButtonsWrapper')
+		child.classList.remove('hideBookButton')
+	}
+
+	function hideBookButtons(e){
+		let childList = [...e.target.childNodes]
+		childList.forEach(elt =>{
+			if(/dynamicButtonsWrapper/.test(elt.className)){
+				elt.classList.add('hideBookButton')
+			}
+		})
+	}	
+
+	return {
+		removeBook,
+		editBookInfo,
+		markBookAsRead,
+		showBookButtons,
+		hideBookButtons
+	}
+})()
+
+
+
+//CREATES DINAMIC PAGINATION, IF NEEDED
+const pagination = (function(){
+
+	function createPagination(list){
+		let ul = document.getElementById('pagination')
+		for(let i = 0; i < list.length; i++){
+			let li = document.createElement('li')
+			li.dataset.pag = `${i + 1}`
+			li.textContent = li.dataset.pag
+			li.className = 'paginationLi'
+			ul.appendChild(li)
 		}
-	})
-}	
-
-function createPagination(list){
-	let ul = document.getElementById('pagination')
-	for(let i = 0; i < list.length; i++){
-		let li = document.createElement('li')
-		li.dataset.pag = `${i + 1}`
-		li.textContent = li.dataset.pag
-		li.className = 'paginationLi'
-		ul.appendChild(li)
 	}
-}
 
-function removePagination(){
-	let ul = document.getElementById('pagination')
-	while(ul.firstChild){
-    	ul.removeChild(ul.firstChild);
+	function removePagination(){
+		let ul = document.getElementById('pagination')
+		while(ul.firstChild){
+			ul.removeChild(ul.firstChild);
+		}
 	}
-}
+
+	function showFraction(list, fractionToBeShowed){
+		let cards = [...document.getElementsByClassName('bookInfoWrapper')]
+		cards.forEach(elt => elt.classList.add('hideWrapper'))
+		list[fractionToBeShowed].forEach(elt => elt.classList.remove('hideWrapper'))
+	}
+
+	function createPaginationArray(arr){
+		const len = modularNum.getDesiredNum()
+		return Array.from({length: Math.ceil(arr.length/len)}, (_, e) => arr.slice(e*len, e*len + len))
+	}
+
+	function verifyClick(e){
+		if(e.target.className === 'paginationLi'){
+			let cards = list
+			pagination.showFraction(cards, e.target.dataset.pag - 1)
+		}
+	}
+
+	return {
+		createPagination,
+		removePagination,
+		showFraction,
+		createPaginationArray,
+		verifyClick
+	}
+})()
 
 ////////////////////////////// FORM (MODAL) AREA //////////////////////////////////
 
 //Manipulate modal info
-const getInfoFromForm = function(){
-	let bookList = DOM.getBookAddedList()
-	let valueList = bookList.map(elt => elt.value)
-	return [valueList, bookList]
-}
 
-function clearInfoFromForm(){
-	const bookAddedList = getInfoFromForm()[1]
-	bookAddedList.map(elt => elt.value = '')
-	let select = getDropdown()
-	select.value = 'Category'
-}
-
-function getDropdown(){
-	return document.getElementById('category')
-}
-
-function getRadio(){
-	return document.getElementById('yesWasRead').checked
-}
-
-function reduceBigStrings(phrase){
-	if(phrase.length > 30){
-		return phrase.slice(0, 30) + '...'
+const form = (function(){
+	const getInfoFromForm = function(){
+		let bookList = DOM.getBookAddedList()
+		let valueList = bookList.map(elt => elt.value)
+		return [valueList, bookList]
 	}
-	else{
-		return phrase
+
+	function clearInfoFromForm(){
+		const bookAddedList = getInfoFromForm()[1]
+		const select = getDropdown()
+		bookAddedList.map(elt => elt.value = '')
+		select.value = 'Category'
 	}
-}
+
+	function getDropdown(){
+		return document.getElementById('category')
+	} 
+
+	function getRadio(){
+		return document.getElementById('yesWasRead').checked
+	}
+
+	function reduceBigStrings(phrase){
+		if(phrase.length > 30){
+			return phrase.slice(0, 30) + '...'
+		}
+		else{
+			return phrase
+		}
+	}
+
+	function fillModal(index){
+		const storageItem = JSON.parse(localStorage.getItem(`${index}`))
+		const inputs = DOM.getBookEditedList()
+		inputs.forEach(elt => {
+			elt.value = storageItem[elt.id.replace('Edited', '')]
+		})
+		modals.edit.selector.value = storageItem.category
+		storageItem.wasRead? 
+		modals.edit.yesWasRead.checked = true
+		:modals.edit.noWasRead.checked = true
+	}
+
+	function makeModalVisible(e, container, modal, editing=false){
+		container.style.display = 'flex'
+		if(editing){
+			bookForEdition.changeEditingId(e.target)
+			let bookToEdit = bookForEdition.getId()
+			form.fillModal(bookToEdit)
+		}
+		setTimeout(() => {
+			container.style.opacity = '1'
+			modal.classList.add('modal-scale')
+		}, 0.2)
+	}
+
+	function hideModal(e){
+		if([...e.target.classList].includes('modal-container')){
+			e.target.firstElementChild.classList.remove('modal-scale')
+			e.target.style.opacity = '0'
+			setTimeout(() => e.target.style.display = 'none', 650)
+		}
+	}
+
+	return {
+		getInfoFromForm,
+		clearInfoFromForm,
+		getRadio,
+		getDropdown,
+		reduceBigStrings,
+		fillModal,
+		makeModalVisible,
+		hideModal
+	}
+})()
+
+
+
+
 ///////////////////////// BOOK CREATION, RENDERING AND FILTERING AREA /////////////////////////////////
 
 //Creates book visual representation with it's informations on the user's screen
 function createBookVisual(elt, index, isHidden=false){
-	let bookInfoWrapper = document.createElement('div')
-	bookInfoWrapper.dataset.in = index
-	let bookParagraph = document.createElement('p')
-	bookParagraph.innerHTML = `<span class='bookVisualInfo titleSpan'>${reduceBigStrings(elt.name)}</span><br>
-							   <span class='bookVisualInfo'>${reduceBigStrings(elt.author)}</span><br>
-							   <span class='bookVisualInfo'>Pages: ${reduceBigStrings(elt.pageNumber)}</span>`
-
-	bookInfoWrapper.className = 'bookInfoWrapper' + (isHidden? ' hideWrapper': '')
+	const bookInfoWrapper = document.createElement('div')
+	const bookParagraph = document.createElement('p')
 	const bookVisual = document.createElement('div')
+	const dynamicButtonsWrapper = makeBtn.createDynamicButtonsWrapper()
+	const bookContainer = DOM.getBookContainer()
+	const dynamicButtons = [
+		makeBtn.createRemoveButton(),
+		makeBtn.createEditButton(), 
+		makeBtn.createInfoButton()
+	]
+	const wrapperChild = [
+		bookVisual,
+		bookParagraph,
+		dynamicButtonsWrapper,
+		makeBtn.createReadButton(elt.wasRead)
+		]
+	bookInfoWrapper.dataset.in = index
+	bookInfoWrapper.className = 'bookInfoWrapper' + (isHidden? ' hideWrapper': '')
+	bookInfoWrapper.addEventListener('mouseenter', btnFunctionality.showBookButtons)
+	bookInfoWrapper.addEventListener('mouseleave', btnFunctionality.hideBookButtons)
+	bookParagraph.innerHTML = 
+	`<span class='bookVisualInfo titleSpan'>${form.reduceBigStrings(elt.name)}</span><br>	   
+	 <span class='bookVisualInfo'>${form.reduceBigStrings(elt.author)}</span><br>
+	 <span class='bookVisualInfo'>Pages: ${form.reduceBigStrings(elt.pageNumber)}</span>`
 	bookVisual.className = 'book'
 	bookVisual.style.backgroundImage = `url('${elt.imgUrl}')`
-	const dynamicButtons = [createRemoveButton(), createEditButton(), createInfoButton()]
-	const dynamicButtonsWrapper = createDynamicButtonsWrapper()
 	dynamicButtons.forEach(button => dynamicButtonsWrapper.appendChild(button))
-	const wrapperChild = [
-						bookVisual,
-						bookParagraph,
-						dynamicButtonsWrapper,
-						createReadButton(elt.wasRead)
-						]
 	wrapperChild.forEach(elt => bookInfoWrapper.appendChild(elt))
-	bookInfoWrapper.addEventListener('mouseover', showBookButtons)
-	bookInfoWrapper.addEventListener('mouseleave', hideBookButtons)
-	DOM.getBookContainer().appendChild(bookInfoWrapper)
+	bookContainer.appendChild(bookInfoWrapper)
 }
 
 //Creates an index to associate the books to the localStorage
@@ -382,10 +443,10 @@ function createBaseIndex(){
 
 //Adds book to the library (the JSON and the visual representantion (card))
 function addBookToLibrary(){
-	let infoList = getInfoFromForm()[0]
+	let infoList = form.getInfoFromForm()[0]
 	let [name, author, pageNumber, pagesRead, imgUrl] = infoList
-	let select = getDropdown()
-	let wasRead = getRadio()
+	let select = form.getDropdown()
+	let wasRead = form.getRadio()
 	if(infoList.every(elt => elt) && select.value !== 'Category'){
 		let book = new Book(name, author, pageNumber, select.value, wasRead, pagesRead, imgUrl)
 		let index = createBaseIndex()
@@ -395,7 +456,7 @@ function addBookToLibrary(){
 		}else{
 			createBookVisual(book, index, true)
 		}
-		clearInfoFromForm()
+		form.clearInfoFromForm()
 	}else{
 		alert("Please, fill all the info!")
 	}
@@ -413,60 +474,60 @@ function loadBooks(e){
 	}else{
 		keys.map(elt => createBookVisual(JSON.parse(localStorage[elt]), elt, true))
 		let books = [...document.getElementsByClassName('bookInfoWrapper')]
-		let fragmented = createPaginationArray(books)
+		let fragmented = pagination.createPaginationArray(books)
 		list = fragmented
-		createPagination(fragmented)
-		showFraction(fragmented, 0)
+		pagination.createPagination(fragmented)
+		pagination.showFraction(fragmented, 0)
 	}
 
 }
 
-function showFraction(list, fractionToBeShowed){
-	let cards = [...document.getElementsByClassName('bookInfoWrapper')]
-	cards.forEach(elt => elt.classList.add('hideWrapper'))
-	list[fractionToBeShowed].forEach(elt => elt.classList.remove('hideWrapper'))
-}
+
 
 //Filters books by category
 function filterBooks(e){
-	removePagination()
-	let target = e.target.textContent
-	selectedLi = target
+	pagination.removePagination()
 	let cards = [...document.getElementsByClassName('bookInfoWrapper')]
+	let targetCategory = e.target.textContent
+	selectedLi = e.target
 	cards.forEach(elt => {
-		if(target === JSON.parse(localStorage.getItem(elt.dataset.in)).category || target === 'Home'){
-			elt.classList.add('notHidden')
+		let index = elt.dataset.in
+		if(targetCategory === JSON.parse(localStorage.getItem(index)).category || 
+		   targetCategory === 'Home'){
+			elt.classList.add('shoWrapper')
 			elt.classList.remove('hideWrapper')
 		}else{
 			elt.classList.add('hideWrapper')
-			elt.classList.remove('notHidden')
+			elt.classList.remove('shoWrapper')
 		}
 	})
-	let displaying = [...document.getElementsByClassName('notHidden')]
+	let displaying = [...document.getElementsByClassName('shoWrapper')]
 	if(displaying.length > modularNum.getDesiredNum()){
-		let fragmented = createPaginationArray(displaying)
+		let fragmented = pagination.createPaginationArray(displaying)
 		list = fragmented
-		createPagination(fragmented)
-		showFraction(fragmented, 0)
+		pagination.createPagination(fragmented)
+		pagination.showFraction(fragmented, 0)
 	}
 }
 
-//Protótipo de paginação (DÁ PARA MELHORAR)
-function createPaginationArray(list){
-	const desiredNum = modularNum.getDesiredNum()
-	let acc = []
-	for(let i = desiredNum; i < list.length; i+= desiredNum){
-		acc.push(list.slice(i - desiredNum, i))
-	}
-  
-    if(acc.length < list.length/desiredNum) {
-  	  let lastElement = acc[acc.length - 1]
-  	  let lastIndex = lastElement[lastElement.length - 1]
-  	  acc.push(list.slice(list.indexOf(lastIndex) + 1, list.length))
-    }
-
-    return acc
-}
+//EVENT LISTENERS
+window.addEventListener('resize', verifySize)
+window.addEventListener('load', loadBooks)
+window.addEventListener('click', pagination.verifyClick)
+DOM.getBookButton().addEventListener('click', addBookToLibrary)
+DOM.getEditButton().addEventListener('click', () =>{
+	return btnFunctionality.editBookInfo(bookForEdition.getId())
+})
+DOM.getNavSelectors().map(elt => {
+	elt.addEventListener('click', (e) => filterBooks(e))
+	elt.addEventListener('click', changeNavLiColor)
+})
+let showModal = document.getElementById('showModal')
+showModal.addEventListener('click', (e) => form.makeModalVisible(e, 
+																 modals.add.container,
+																 modals.add.modal
+																 ))
+window.addEventListener('click', form.hideModal)
 
 
 
