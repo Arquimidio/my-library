@@ -43,7 +43,7 @@ const DOM = (function(){
 })()
 
 const modularNum = (function(){
-	const desiredNum = 16;
+	const desiredNum = 8;
 	const getDesiredNum = () => desiredNum
 	return {getDesiredNum}
 })()
