@@ -218,17 +218,17 @@ footer{
 }
 
 footer p{
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
 #github{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2rem;
+    font-size: 2rem;
     cursor: pointer;
     border-radius: 50%;
-    padding: 5px;
+    padding: 10px;
     border: 1px solid white;
     color: white;
     background: #376DF1;

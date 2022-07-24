@@ -66,6 +66,10 @@
 }
 
 
+.readButton:hover{
+    color: green;
+}
+
 .editButton{
     display: flex;
     font-size: 1.5rem;

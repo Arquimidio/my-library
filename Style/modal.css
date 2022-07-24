@@ -3,24 +3,6 @@
 	margin: 0;
 }
 
-.modal-container,
-.modal,
-.sides{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.right-side, .left-side{
-	margin: 10px;
-	padding: 0px;
-}
-
-.right-side{
-	margin-bottom: 16.45px;
-}
-
-
 .modal-container{
 	width: 100%;
 	height: 100%;
@@ -30,13 +12,17 @@
 	background: rgba(0, 0, 0, 0.700);
 	z-index: 3;
 	display: none;
+	justify-content: center;
+	align-items: center;
 	transition: all 0.7s;
 }
 
 .modal{
+	display: flex;
+	justify-content: center;
 	flex-direction: column;
 	background: #E6F4F1;
-	width:auto;
+	width: 400px;
 	padding: 30px;
 	border-radius: 10px;
 	font-family: sans-serif;
@@ -44,7 +30,6 @@
 	transition: all .7s;
 
 }
-
 
 .modal-scale{
 	transform: scale(1.0);
@@ -60,19 +45,16 @@
 .bookInfo, select{
 	padding: 10px 0px;
 	font-size: 1.5rem;
+	margin-top: 10px;
 	border: none;
 	border-bottom: 1px solid #376DF1;
 	background: #E6F4F1;
-	border-radius: 0px;
 }
 
 select{
-	display: block;
-	width: 100%;
 	border: 1px solid #376DF1;
 	border-radius: 5px;
 	background: transparent;
-	cursor: pointer;
 }
 
 .bookInfo:focus{
@@ -91,10 +73,10 @@ select:focus{
 }
 
 
+
 #addBook, #editBook{
 	font-size: 1.5rem;
 	padding: 5px;
-	width: 100%;
 	margin-top: 30px;
 	border-radius: 5px;
 	cursor: pointer;
@@ -108,19 +90,17 @@ select:focus{
 	color: #376DF1;
 }
 
-#wasRead, #wasReadEdited{
+#wasRead{
 	display: flex;
 	flex-direction: row;
 }
 
-#wasRead div, #wasReadEdited div{
+#wasRead div{
 	margin:  0px 10px;
 }
 
 
-label{
-	color:  grey;
-	font-size: 1.5rem;
+.editBook{
+     
 }
-
 
