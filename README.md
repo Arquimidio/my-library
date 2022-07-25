@@ -19,7 +19,7 @@ A ideia foi criar uma **single page aplication** com funcionalidades de um regis
 3. Vanilla JavaScript
 
 ## :nerd_face: Aprendizados
-### O projeto foi incrível para aprender, quase que literalmente, um caminhão de coisas, conhecimentos valiosos que com certeza serão de grande utilidade para projetos futuros. Listo alguns conhecimentos adquiridos e aprimorados:
+### O projeto foi incrível para aprender um caminhão de coisas, conhecimentos valiosos que com certeza serão de grande utilidade para projetos futuros. Listo alguns conhecimentos adquiridos e aprimorados:
 1. Uso do localstorage, parse e stringify
 2. Module pattern, closure e IIFEs
 3. Manipulação da DOM sem o uso de frameworks
